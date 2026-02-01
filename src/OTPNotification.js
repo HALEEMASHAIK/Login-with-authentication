@@ -15,7 +15,7 @@ function OTPNotification({ otp, email, type, onClose }) {
     }, 30000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [handleClose]);
 
   const handleClose = () => {
     setIsVisible(false);
