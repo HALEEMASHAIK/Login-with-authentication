@@ -1,0 +1,182 @@
+.sso-buttons-container {
+  width: 100%;
+  margin-top: 1.5rem;
+}
+
+.sso-divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.sso-divider::before,
+.sso-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e1e5e9;
+}
+
+.sso-divider span {
+  padding: 0 1rem;
+  font-weight: 500;
+}
+
+.sso-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sso-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  background: white;
+  color: #333;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.sso-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sso-button:active {
+  transform: translateY(0);
+}
+
+.sso-button:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Provider-specific button styles */
+.google-button:hover {
+  border-color: #4285f4;
+  background: #f8f9ff;
+}
+
+.facebook-button:hover {
+  border-color: #1877f2;
+  background: #f0f7ff;
+}
+
+.github-button:hover {
+  border-color: #333;
+  background: #f8f8f8;
+}
+
+.sso-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Loading state */
+.sso-button.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.sso-button.loading:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.sso-button.loading .sso-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Success state */
+.sso-button.success {
+  border-color: #27ae60;
+  background: #d4edda;
+  color: #155724;
+}
+
+/* Error state */
+.sso-button.error {
+  border-color: #e74c3c;
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .sso-button {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.9rem;
+  }
+  
+  .sso-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .sso-button {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+  }
+  
+  .sso-button:hover {
+    background: #4a5568;
+  }
+  
+  .google-button:hover {
+    background: #3182ce;
+    border-color: #3182ce;
+  }
+  
+  .facebook-button:hover {
+    background: #2b6cb0;
+    border-color: #2b6cb0;
+  }
+  
+  .github-button:hover {
+    background: #4a5568;
+    border-color: #718096;
+  }
+}
+
+/* Accessibility improvements */
+.sso-button[aria-label] {
+  position: relative;
+}
+
+.sso-button[aria-label]::after {
+  content: attr(aria-label);
+  position: absolute;
+  left: -9999px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .sso-button {
+    border-width: 2px;
+  }
+  
+  .sso-button:focus {
+    outline-width: 3px;
+  }
+}

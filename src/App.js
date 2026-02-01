@@ -8,6 +8,8 @@ import NewPassword from './NewPassword';
 import OTPNotification from './OTPNotification';
 import Toast from './Toast';
 import database from './database';
+import userAPI from './api/userApi';
+import authAPI from './api/authApi';
 import './App.css';
 
 function App() {
@@ -64,41 +66,93 @@ function App() {
     showOTPNotificationPopup(otp, email, 'login');
   };
 
-  const handleSSO = (email) => {
-    // SSO login/signup - direct access without authentication or email input
-    setIsAuthenticated(true);
-    setIsLoginVerified(true);
-    setCurrentView('dashboard');
-    
-    // Set current user for SSO (extract name from email or use default)
-    const userName = email === 'sso-user' ? 'Google User' : email.split('@')[0];
-    setCurrentUser({ name: userName, email: email === 'sso-user' ? 'user@gmail.com' : email });
-    
-    console.log(`🚀 SSO Access Granted!`);
-    console.log(`🚀 Direct dashboard access via SSO (no email input or OTP required)`);
-    
-    // Show success toast
-    showToast('Logged in successfully via Google SSO!', 'success');
+  const handleSSO = async (email) => {
+    try {
+      // Get SSO provider from localStorage (set by SSOButtons component)
+      const ssoProvider = localStorage.getItem('ssoProvider') || 'google';
+      
+      // SSO login/signup - integrate with real API
+      setIsAuthenticated(true);
+      setCurrentView('dashboard');
+      
+      // Get user profile from SSO API
+      const userProfile = await getSSOUserProfileFromAPI(email);
+      setCurrentUser(userProfile);
+      
+      // Store auth token
+      authAPI.setAuthToken(userProfile.token || 'mock-token', true);
+      
+      console.log(`🚀 SSO Access Granted!`);
+      console.log(`🚀 User Profile:`, userProfile);
+      console.log(`🚀 Direct dashboard access via ${ssoProvider} SSO (no email input or OTP required)`);
+      
+      // Show success toast
+      showToast(`Logged in successfully via ${ssoProvider.charAt(0).toUpperCase() + ssoProvider.slice(1)} SSO!`, 'success');
+    } catch (error) {
+      console.error('SSO Error:', error);
+      showToast('Failed to login with SSO. Please try again.', 'error');
+    }
   };
 
-  // const handleEmailSubmit = (email) => {
-  //   // SSO with email input - direct access without authentication
-  //   setIsAuthenticated(true);
-  //   setIsLoginVerified(true);
-  //   // setShowEmailModal(false);
-  //   setCurrentView('dashboard');
-    
-  //   // Set current user for email input SSO
-  //   const userName = email.split('@')[0];
-  //   setCurrentUser({ name: userName, email: email });
-    
-  //   console.log(`🚀 SSO Access Granted!`);
-  //   console.log(`🚀 Gmail Address: ${email}`);
-  //   console.log(`🚀 Direct dashboard access via SSO (no OTP required)`);
-    
-  //   // Show success toast
-  //   showToast('Logged in successfully via Google SSO!', 'success');
-  // };
+  // Get SSO user profile from API
+  const getSSOUserProfileFromAPI = async (email) => {
+    try {
+      // Get SSO provider from localStorage (set by SSOButtons component)
+      const ssoProvider = localStorage.getItem('ssoProvider') || 'google';
+      const ssoData = JSON.parse(localStorage.getItem('ssoData') || '{}');
+      
+      // Try to get SSO user profile from API
+      const userProfile = await userAPI.getSSOUserProfile(ssoProvider, 'mock-sso-token');
+      
+      // If user doesn't exist, create/update SSO user
+      if (!userProfile || userProfile.error) {
+        const newSSOData = {
+          provider: ssoProvider,
+          providerId: `${ssoProvider}_${Date.now()}`,
+          email: email === 'sso-user' ? ssoData.email || 'user@gmail.com' : email,
+          name: email === 'sso-user' ? ssoData.name || `${ssoProvider.charAt(0).toUpperCase() + ssoProvider.slice(1)} User` : email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+          avatar: ssoData.avatar || `https://ui-avatars.com/api/?name=${email.split('@')[0]}&background=667eea&color=fff`,
+          token: `mock-jwt-token-${  Date.now()}`
+        };
+        
+        const createdUser = await userAPI.createOrUpdateSSOUser(newSSOData);
+        
+        // Clear SSO data from localStorage
+        localStorage.removeItem('ssoProvider');
+        localStorage.removeItem('ssoData');
+        
+        return createdUser;
+      }
+      
+      return userProfile;
+    } catch (error) {
+      console.log('SSO API not available, using mock data:', error.message);
+      
+      // Get SSO provider from localStorage for fallback
+      const ssoProvider = localStorage.getItem('ssoProvider') || 'google';
+      const ssoData = JSON.parse(localStorage.getItem('ssoData') || '{}');
+      
+      // Clear SSO data from localStorage
+      localStorage.removeItem('ssoProvider');
+      localStorage.removeItem('ssoData');
+      
+      // Fallback to mock SSO data for development
+      return {
+        id: Math.random().toString(36).substr(2, 9),
+        providerId: `${ssoProvider}_${Date.now()}`,
+        name: email === 'sso-user' ? ssoData.name || `${ssoProvider.charAt(0).toUpperCase() + ssoProvider.slice(1)} User` : email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+        email: email === 'sso-user' ? ssoData.email || 'user@gmail.com' : email,
+        avatar: ssoData.avatar || `https://ui-avatars.com/api/?name=${email.split('@')[0]}&background=667eea&color=fff`,
+        provider: ssoProvider,
+        token: `mock-jwt-token-${  Date.now()}`,
+        accessToken: `mock-access-token-${  Date.now()}`,
+        refreshToken: `mock-refresh-token-${  Date.now()}`,
+        expiresIn: 3600,
+        createdAt: new Date().toISOString(),
+        lastLogin: new Date().toISOString()
+      };
+    }
+  };
 
   const handleForgotPassword = (email) => {
     const otp = generateOTP();
