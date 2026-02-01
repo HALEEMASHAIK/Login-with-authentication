@@ -69,72 +69,113 @@
   line-height: 1.5;
 }
 
-.sso-email-form {
+.sso-email-options {
   display: flex;
   flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sso-email-option {
+  display: flex;
+  align-items: center;
   gap: 1rem;
-}
-
-.sso-email-input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.sso-email-input-group label {
-  font-weight: 500;
-  color: #333;
-  font-size: 0.9rem;
-}
-
-.sso-email-input {
-  padding: 0.75rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
-  outline: none;
-}
-
-.sso-email-input:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.sso-email-input:disabled {
-  background: #f8f9fa;
-  color: #666;
-  cursor: not-allowed;
-}
-
-.sso-email-submit {
-  padding: 0.875rem 1rem;
-  background: #667eea;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  font-weight: 500;
+  padding: 1rem;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  background: white;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 0.5rem;
+  text-align: left;
+  width: 100%;
+  position: relative;
 }
 
-.sso-email-submit:hover:not(:disabled) {
-  background: #5a6fd8;
+.sso-email-option:hover:not(:disabled) {
+  border-color: #667eea;
+  background: #f8f9ff;
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
 }
 
-.sso-email-submit:disabled {
-  background: #ccc;
+.sso-email-option:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
   transform: none;
+}
+
+.sso-email-option.loading {
+  border-color: #667eea;
+  background: #f8f9ff;
+}
+
+.sso-email-option.loading .sso-email-avatar,
+.sso-email-option.loading .sso-email-info,
+.sso-email-option.loading .sso-email-provider {
+  opacity: 0.5;
+}
+
+.sso-email-avatar {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #e1e5e9;
+}
+
+.sso-email-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sso-email-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sso-email-name {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.sso-email-address {
+  color: #666;
+  font-size: 0.85rem;
+  word-break: break-all;
+}
+
+.provider-badge {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.provider-badge.google {
+  background: #e8f0fe;
+  color: #1967d2;
+}
+
+.provider-badge.facebook {
+  background: #e7f3ff;
+  color: #1877f2;
+}
+
+.provider-badge.github {
+  background: #f6f8fa;
+  color: #24292e;
+  border: 1px solid #d0d7de;
 }
 
 .sso-email-modal-footer {
   margin-top: 1.5rem;
   padding-top: 1rem;
   border-top: 1px solid #e1e5e9;
+  flex-shrink: 0;
 }
 
 .sso-email-note {
@@ -144,29 +185,32 @@
   line-height: 1.4;
 }
 
-/* Provider-specific styles */
-.sso-email-modal[data-provider="google"] .sso-email-submit {
-  background: #4285f4;
+/* Loading state for specific email option */
+.sso-email-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
 }
 
-.sso-email-modal[data-provider="google"] .sso-email-submit:hover:not(:disabled) {
-  background: #3367d6;
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
-.sso-email-modal[data-provider="facebook"] .sso-email-submit {
-  background: #1877f2;
+/* Remove old loading styles */
+.sso-email-option:disabled::after {
+  display: none;
 }
 
-.sso-email-modal[data-provider="facebook"] .sso-email-submit:hover:not(:disabled) {
-  background: #166fe5;
-}
-
-.sso-email-modal[data-provider="github"] .sso-email-submit {
-  background: #333;
-}
-
-.sso-email-modal[data-provider="github"] .sso-email-submit:hover:not(:disabled) {
-  background: #555;
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* Animations */

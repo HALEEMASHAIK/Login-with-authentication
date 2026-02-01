@@ -70,13 +70,25 @@ function App() {
     try {
       // Get SSO provider from localStorage (set by SSOButtons component)
       const ssoProvider = localStorage.getItem('ssoProvider') || 'google';
+      const ssoData = JSON.parse(localStorage.getItem('ssoData') || '{}');
+      
+      console.log(`🚀 Processing SSO login for ${ssoProvider}...`);
+      console.log(`📧 Email: ${email}`);
       
       // SSO login/signup - integrate with real API
       setIsAuthenticated(true);
       setCurrentView('dashboard');
       
-      // Get user profile from SSO API
-      const userProfile = await getSSOUserProfileFromAPI(email);
+      // Get user profile from SSO API or use Firebase data
+      let userProfile;
+      if (ssoData.id) {
+        // Use Firebase user data
+        userProfile = await getSSOUserProfileFromAPI(email, ssoData);
+      } else {
+        // Fallback to mock data
+        userProfile = await getSSOUserProfileFromAPI(email);
+      }
+      
       setCurrentUser(userProfile);
       
       // Store auth token
@@ -84,7 +96,7 @@ function App() {
       
       console.log(`🚀 SSO Access Granted!`);
       console.log(`🚀 User Profile:`, userProfile);
-      console.log(`🚀 Direct dashboard access via ${ssoProvider} SSO (no email input or OTP required)`);
+      console.log(`🚀 Direct dashboard access via ${ssoProvider} SSO`);
       
       // Show success toast
       showToast(`Logged in successfully via ${ssoProvider.charAt(0).toUpperCase() + ssoProvider.slice(1)} SSO!`, 'success');
@@ -95,11 +107,11 @@ function App() {
   };
 
   // Get SSO user profile from API
-  const getSSOUserProfileFromAPI = async (email) => {
+  const getSSOUserProfileFromAPI = async (email, firebaseData = null) => {
     try {
       // Get SSO provider from localStorage (set by SSOButtons component)
       const ssoProvider = localStorage.getItem('ssoProvider') || 'google';
-      const ssoData = JSON.parse(localStorage.getItem('ssoData') || '{}');
+      const ssoData = firebaseData || JSON.parse(localStorage.getItem('ssoData') || '{}');
       
       // Try to get SSO user profile from API
       const userProfile = await userAPI.getSSOUserProfile(ssoProvider, 'mock-sso-token');
@@ -108,11 +120,14 @@ function App() {
       if (!userProfile || userProfile.error) {
         const newSSOData = {
           provider: ssoProvider,
-          providerId: `${ssoProvider}_${Date.now()}`,
+          providerId: ssoData.providerId || `${ssoProvider}_${Date.now()}`,
           email,
-          name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+          name: ssoData.name || email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
           avatar: ssoData.avatar || `https://ui-avatars.com/api/?name=${email.split('@')[0]}&background=667eea&color=fff`,
-          token: `mock-jwt-token-${  Date.now()}`
+          token: ssoData.token || `mock-jwt-token-${  Date.now()}`,
+          emailVerified: ssoData.emailVerified || false,
+          createdAt: ssoData.createdAt || new Date().toISOString(),
+          lastLogin: new Date().toISOString()
         };
         
         const createdUser = await userAPI.createOrUpdateSSOUser(newSSOData);
@@ -130,7 +145,7 @@ function App() {
       
       // Get SSO provider from localStorage for fallback
       const ssoProvider = localStorage.getItem('ssoProvider') || 'google';
-      const ssoData = JSON.parse(localStorage.getItem('ssoData') || '{}');
+      const ssoData = firebaseData || JSON.parse(localStorage.getItem('ssoData') || '{}');
       
       // Clear SSO data from localStorage
       localStorage.removeItem('ssoProvider');
@@ -138,17 +153,18 @@ function App() {
       
       // Fallback to mock SSO data for development
       return {
-        id: Math.random().toString(36).substr(2, 9),
-        providerId: `${ssoProvider}_${Date.now()}`,
-        name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+        id: ssoData.id || Math.random().toString(36).substr(2, 9),
+        providerId: ssoData.providerId || `${ssoProvider}_${Date.now()}`,
+        name: ssoData.name || email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
         email,
         avatar: ssoData.avatar || `https://ui-avatars.com/api/?name=${email.split('@')[0]}&background=667eea&color=fff`,
         provider: ssoProvider,
-        token: `mock-jwt-token-${  Date.now()}`,
-        accessToken: `mock-access-token-${  Date.now()}`,
-        refreshToken: `mock-refresh-token-${  Date.now()}`,
-        expiresIn: 3600,
-        createdAt: new Date().toISOString(),
+        token: ssoData.token || `mock-jwt-token-${  Date.now()}`,
+        accessToken: ssoData.accessToken || `mock-access-token-${  Date.now()}`,
+        refreshToken: ssoData.refreshToken || `mock-refresh-token-${  Date.now()}`,
+        expiresIn: ssoData.expiresIn || 3600,
+        emailVerified: ssoData.emailVerified || false,
+        createdAt: ssoData.createdAt || new Date().toISOString(),
         lastLogin: new Date().toISOString()
       };
     }
