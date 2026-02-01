@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import FoodMenu from './FoodMenu';
 import './Dashboard.css';
 
-function Dashboard({ onLogout }) {
+function Dashboard({ onLogout, currentUser }) {
   const [activeTab, setActiveTab] = useState('menu');
   const [cartItems, setCartItems] = useState([]);
 
@@ -48,7 +48,15 @@ function Dashboard({ onLogout }) {
     <div className="dashboard">
       <header className="dashboard-header">
         <div className="header-content">
-          <h1>FoodOrder Dashboard</h1>
+          <div className="header-left">
+            <h1>FoodOrder Dashboard</h1>
+            {currentUser && (
+              <div className="user-welcome">
+                <span className="welcome-text">Welcome, </span>
+                <span className="user-name">{currentUser.name}</span>
+              </div>
+            )}
+          </div>
           <div className="header-actions">
             <button className="cart-button" onClick={() => setActiveTab('cart')}>
               🛒 Cart ({getTotalItems()})
@@ -144,8 +152,8 @@ function Dashboard({ onLogout }) {
           <div className="profile-section">
             <h2>Your Profile</h2>
             <div className="profile-info">
-              <p><strong>Name:</strong> John Doe</p>
-              <p><strong>Email:</strong> john.doe@gmail.com</p>
+              <p><strong>Name:</strong> {currentUser?.name || 'N/A'}</p>
+              <p><strong>Email:</strong> {currentUser?.email || 'N/A'}</p>
               <p><strong>Phone:</strong> +1 234 567 8900</p>
               <p><strong>Address:</strong> 123 Main St, City, State 12345</p>
             </div>

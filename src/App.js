@@ -13,14 +13,15 @@ import './App.css';
 function App() {
   const [currentView, setCurrentView] = useState('login');
   const [otpEmail, setOtpEmail] = useState('');
-  const [generatedOTP, setGeneratedOTP] = useState('');
+  const [, setGeneratedOTP] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
-  const [isLoginVerified, setIsLoginVerified] = useState(false);
+  const [, setIsLoginVerified] = useState(false);
   const [loginEmail, setLoginEmail] = useState('');
   const [showOTPNotification, setShowOTPNotification] = useState(false);
   const [otpNotificationData, setOtpNotificationData] = useState({});
   const [toast, setToast] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
   // Initialize database and show test credentials
   React.useEffect(() => {
@@ -68,6 +69,11 @@ function App() {
     setIsAuthenticated(true);
     setIsLoginVerified(true);
     setCurrentView('dashboard');
+    
+    // Set current user for SSO (extract name from email or use default)
+    const userName = email === 'sso-user' ? 'Google User' : email.split('@')[0];
+    setCurrentUser({ name: userName, email: email === 'sso-user' ? 'user@gmail.com' : email });
+    
     console.log(`🚀 SSO Access Granted!`);
     console.log(`🚀 Direct dashboard access via SSO (no email input or OTP required)`);
     
@@ -75,19 +81,24 @@ function App() {
     showToast('Logged in successfully via Google SSO!', 'success');
   };
 
-  const handleEmailSubmit = (email) => {
-    // SSO with email input - direct access without authentication
-    setIsAuthenticated(true);
-    setIsLoginVerified(true);
-    // setShowEmailModal(false);
-    setCurrentView('dashboard');
-    console.log(`🚀 SSO Access Granted!`);
-    console.log(`🚀 Gmail Address: ${email}`);
-    console.log(`🚀 Direct dashboard access via SSO (no OTP required)`);
+  // const handleEmailSubmit = (email) => {
+  //   // SSO with email input - direct access without authentication
+  //   setIsAuthenticated(true);
+  //   setIsLoginVerified(true);
+  //   // setShowEmailModal(false);
+  //   setCurrentView('dashboard');
     
-    // Show success toast
-    showToast('Logged in successfully via Google SSO!', 'success');
-  };
+  //   // Set current user for email input SSO
+  //   const userName = email.split('@')[0];
+  //   setCurrentUser({ name: userName, email: email });
+    
+  //   console.log(`🚀 SSO Access Granted!`);
+  //   console.log(`🚀 Gmail Address: ${email}`);
+  //   console.log(`🚀 Direct dashboard access via SSO (no OTP required)`);
+    
+  //   // Show success toast
+  //   showToast('Logged in successfully via Google SSO!', 'success');
+  // };
 
   const handleForgotPassword = (email) => {
     const otp = generateOTP();
@@ -115,6 +126,13 @@ function App() {
     setIsLoginVerified(true);
     setCurrentView('dashboard');
     setGeneratedOTP('');
+    
+    // Set current user for manual login
+    const user = database.findUserByEmail(loginEmail);
+    if (user) {
+      setCurrentUser({ name: user.name, email: user.email });
+    }
+    
     setLoginEmail('');
     
     // Show success toast
@@ -140,6 +158,7 @@ function App() {
     setGeneratedOTP('');
     setLoginEmail('');
     setResetEmail('');
+    setCurrentUser(null);
     
     // Show logout toast
     showToast('Logged out successfully!', 'success');
@@ -156,9 +175,9 @@ function App() {
     }
   };
 
-  const handleCancelEmailModal = () => {
-    // Email modal removed - no longer needed
-  };
+  // const handleCancelEmailModal = () => {
+  //   // Email modal removed - no longer needed
+  // };
 
   const handleCloseOTPNotification = () => {
     setShowOTPNotification(false);
@@ -167,7 +186,7 @@ function App() {
   return (
     <div className="App">
       {isAuthenticated ? (
-        <Dashboard onLogout={handleLogout} />
+        <Dashboard onLogout={handleLogout} currentUser={currentUser} />
       ) : currentView === 'login' ? (
         <Login 
           onSwitchToSignup={() => setCurrentView('signup')} 
