@@ -1,0 +1,275 @@
+.sso-email-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.sso-email-modal {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  animation: slideUp 0.3s ease;
+  overflow: hidden;
+}
+
+.sso-email-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e1e5e9;
+}
+
+.sso-email-modal-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.sso-email-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0.25rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.sso-email-modal-close:hover {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.sso-email-modal-body {
+  padding: 1.5rem;
+}
+
+.sso-email-modal-description {
+  margin: 0 0 1.5rem 0;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.sso-email-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sso-email-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sso-email-input-group label {
+  font-weight: 500;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.sso-email-input {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.sso-email-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.sso-email-input:disabled {
+  background: #f8f9fa;
+  color: #666;
+  cursor: not-allowed;
+}
+
+.sso-email-submit {
+  padding: 0.875rem 1rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.sso-email-submit:hover:not(:disabled) {
+  background: #5a6fd8;
+  transform: translateY(-1px);
+}
+
+.sso-email-submit:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.sso-email-modal-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e1e5e9;
+}
+
+.sso-email-note {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* Provider-specific styles */
+.sso-email-modal[data-provider="google"] .sso-email-submit {
+  background: #4285f4;
+}
+
+.sso-email-modal[data-provider="google"] .sso-email-submit:hover:not(:disabled) {
+  background: #3367d6;
+}
+
+.sso-email-modal[data-provider="facebook"] .sso-email-submit {
+  background: #1877f2;
+}
+
+.sso-email-modal[data-provider="facebook"] .sso-email-submit:hover:not(:disabled) {
+  background: #166fe5;
+}
+
+.sso-email-modal[data-provider="github"] .sso-email-submit {
+  background: #333;
+}
+
+.sso-email-modal[data-provider="github"] .sso-email-submit:hover:not(:disabled) {
+  background: #555;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .sso-email-modal {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .sso-email-modal-header,
+  .sso-email-modal-body {
+    padding: 1rem;
+  }
+  
+  .sso-email-modal-header h3 {
+    font-size: 1.1rem;
+  }
+  
+  .sso-email-input {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9rem;
+  }
+  
+  .sso-email-submit {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .sso-email-modal {
+    background: #2d3748;
+    color: #e2e8f0;
+  }
+  
+  .sso-email-modal-header {
+    border-bottom-color: #4a5568;
+  }
+  
+  .sso-email-modal-header h3 {
+    color: #e2e8f0;
+  }
+  
+  .sso-email-modal-close {
+    color: #a0aec0;
+  }
+  
+  .sso-email-modal-close:hover {
+    background: #4a5568;
+    color: #e2e8f0;
+  }
+  
+  .sso-email-modal-description {
+    color: #a0aec0;
+  }
+  
+  .sso-email-input-group label {
+    color: #e2e8f0;
+  }
+  
+  .sso-email-input {
+    background: #4a5568;
+    border-color: #718096;
+    color: #e2e8f0;
+  }
+  
+  .sso-email-input:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  }
+  
+  .sso-email-input:disabled {
+    background: #2d3748;
+    color: #a0aec0;
+  }
+  
+  .sso-email-modal-footer {
+    border-top-color: #4a5568;
+  }
+  
+  .sso-email-note {
+    color: #a0aec0;
+  }
+}

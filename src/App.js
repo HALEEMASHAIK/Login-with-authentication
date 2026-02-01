@@ -109,8 +109,8 @@ function App() {
         const newSSOData = {
           provider: ssoProvider,
           providerId: `${ssoProvider}_${Date.now()}`,
-          email: email === 'sso-user' ? ssoData.email || 'user@gmail.com' : email,
-          name: email === 'sso-user' ? ssoData.name || `${ssoProvider.charAt(0).toUpperCase() + ssoProvider.slice(1)} User` : email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+          email,
+          name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
           avatar: ssoData.avatar || `https://ui-avatars.com/api/?name=${email.split('@')[0]}&background=667eea&color=fff`,
           token: `mock-jwt-token-${  Date.now()}`
         };
@@ -140,8 +140,8 @@ function App() {
       return {
         id: Math.random().toString(36).substr(2, 9),
         providerId: `${ssoProvider}_${Date.now()}`,
-        name: email === 'sso-user' ? ssoData.name || `${ssoProvider.charAt(0).toUpperCase() + ssoProvider.slice(1)} User` : email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
-        email: email === 'sso-user' ? ssoData.email || 'user@gmail.com' : email,
+        name: email.split('@')[0].charAt(0).toUpperCase() + email.split('@')[0].slice(1),
+        email,
         avatar: ssoData.avatar || `https://ui-avatars.com/api/?name=${email.split('@')[0]}&background=667eea&color=fff`,
         provider: ssoProvider,
         token: `mock-jwt-token-${  Date.now()}`,
