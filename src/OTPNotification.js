@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './OTPNotification.css';
 
 function OTPNotification({ otp, email, type, onClose }) {
   const [isVisible, setIsVisible] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const handleClose = useCallback(() => {
+    setIsVisible(false);
+    setTimeout(() => onClose(), 300);
+  }, [onClose]);
 
   useEffect(() => {
     // Show notification with a slight delay for animation
@@ -16,11 +21,6 @@ function OTPNotification({ otp, email, type, onClose }) {
 
     return () => clearTimeout(timer);
   }, [handleClose]);
-
-  const handleClose = () => {
-    setIsVisible(false);
-    setTimeout(() => onClose(), 300);
-  };
 
   const copyToClipboard = async () => {
     try {
