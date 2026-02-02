@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SSOButtons from './components/SSOButtons';
+import DynamicSSO from './components/DynamicSSO';
 import database from './database';
 import './Login.css';
 
@@ -145,7 +145,10 @@ function Signup({ onSwitchToLogin, onSSO, showToast }) {
             </button>
           </form>
           
-          <SSOButtons onSSO={onSSO} buttonText="Sign up with" />
+          <DynamicSSO 
+            onSSO={onSSO} 
+            buttonText="Sign up with"
+          />
           
           <div className="login-footer">
             <p>Already have an account? <button onClick={onSwitchToLogin} className="link-button">Sign in</button></p>

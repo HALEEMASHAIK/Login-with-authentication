@@ -29,6 +29,21 @@ const isFirebaseConfigured = () => {
          !firebaseConfig.projectId.includes('your-app');
 };
 
+// Check if domain is authorized for Firebase
+const isDomainAuthorized = () => {
+  const currentDomain = window.location.hostname;
+  const authorizedDomains = [
+    'localhost',
+    '127.0.0.1',
+    'your-app.firebaseapp.com', // Replace with your actual Firebase domain
+    // Add your production domains here
+  ];
+  
+  return authorizedDomains.includes(currentDomain) || 
+         currentDomain.endsWith('.firebaseapp.com') ||
+         currentDomain.endsWith('.web.app');
+};
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -54,13 +69,17 @@ githubProvider.addScope('user:email');
 export const firebaseSSO = {
   // Check if Firebase is configured
   isConfigured() {
-    return isFirebaseConfigured();
+    return isFirebaseConfigured() && isDomainAuthorized();
   },
 
   // Sign in with Google
   async signInWithGoogle() {
     if (!isFirebaseConfigured()) {
       throw new Error('Firebase is not configured');
+    }
+    
+    if (!isDomainAuthorized()) {
+      throw new Error('Domain is not authorized for Firebase authentication');
     }
     
     try {
@@ -78,6 +97,10 @@ export const firebaseSSO = {
       throw new Error('Firebase is not configured');
     }
     
+    if (!isDomainAuthorized()) {
+      throw new Error('Domain is not authorized for Firebase authentication');
+    }
+    
     try {
       const result = await signInWithPopup(auth, facebookProvider);
       return result.user;
@@ -91,6 +114,10 @@ export const firebaseSSO = {
   async signInWithGitHub() {
     if (!isFirebaseConfigured()) {
       throw new Error('Firebase is not configured');
+    }
+    
+    if (!isDomainAuthorized()) {
+      throw new Error('Domain is not authorized for Firebase authentication');
     }
     
     try {

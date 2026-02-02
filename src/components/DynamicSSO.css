@@ -1,0 +1,356 @@
+/* Dynamic SSO Container */
+.dynamic-sso-container {
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.sso-divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  position: relative;
+}
+
+.sso-divider::before,
+.sso-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #e1e5e9;
+}
+
+.sso-divider span {
+  padding: 0 1rem;
+  color: #666;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: white;
+  position: relative;
+  z-index: 1;
+}
+
+/* Dynamic SSO Buttons */
+.dynamic-sso-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.dynamic-sso-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  border: 1px solid #e1e5e9;
+  border-radius: 8px;
+  background: white;
+  color: #333;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.dynamic-sso-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--provider-color, #667eea);
+}
+
+.dynamic-sso-button:active {
+  transform: translateY(0);
+}
+
+/* Provider-specific button styles */
+.dynamic-sso-button.google-button {
+  border-color: #4285f4;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+}
+
+.dynamic-sso-button.google-button:hover {
+  background: linear-gradient(135deg, #f8f9ff 0%, #e8f0fe 100%);
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.2);
+}
+
+.dynamic-sso-button.facebook-button {
+  border-color: #1877f2;
+  background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+}
+
+.dynamic-sso-button.facebook-button:hover {
+  background: linear-gradient(135deg, #f0f7ff 0%, #e7f3ff 100%);
+  box-shadow: 0 4px 12px rgba(24, 119, 242, 0.2);
+}
+
+.dynamic-sso-button.github-button {
+  border-color: #333;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
+}
+
+.dynamic-sso-button.github-button:hover {
+  background: linear-gradient(135deg, #f8f8f8 0%, #f6f8fa 100%);
+  box-shadow: 0 4px 12px rgba(51, 51, 51, 0.2);
+}
+
+/* Custom provider button styles */
+.dynamic-sso-button:not(.google-button):not(.facebook-button):not(.github-button) {
+  border-color: var(--provider-color, #667eea);
+  background: linear-gradient(135deg, #ffffff 0%, var(--provider-bg-color, #f8f9ff) 100%);
+}
+
+.dynamic-sso-button:not(.google-button):not(.facebook-button):not(.github-button):hover {
+  background: linear-gradient(135deg, var(--provider-bg-color, #f8f9ff) 0%, var(--provider-bg-color, #f8f9ff) 100%);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+/* Button Icon */
+.sso-button-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.sso-icon {
+  width: 100%;
+  height: 100%;
+}
+
+/* Button Text */
+.sso-button-text {
+  font-weight: 500;
+  color: #333;
+}
+
+/* Loading State */
+.dynamic-sso-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.sso-loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.dynamic-sso-loading p {
+  color: #666;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Empty State */
+.dynamic-sso-empty {
+  text-align: center;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px dashed #e1e5e9;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.sso-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.dynamic-sso-empty h3 {
+  color: #333;
+  margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+}
+
+.dynamic-sso-empty p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+.sso-setup-steps {
+  text-align: left;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  border: 1px solid #e1e5e9;
+}
+
+.sso-setup-steps h4 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.sso-setup-steps ol {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.sso-setup-steps li {
+  margin-bottom: 0.5rem;
+}
+
+.sso-setup-steps code {
+  background: #f1f3f4;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+}
+
+.sso-setup-steps a {
+  color: #667eea;
+  text-decoration: none;
+}
+
+.sso-setup-steps a:hover {
+  text-decoration: underline;
+}
+
+.sso-setup-help {
+  background: #e8f0fe;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #4285f4;
+}
+
+.sso-setup-help p {
+  margin: 0;
+  color: #1967d2;
+  font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .dynamic-sso-button {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.9rem;
+  }
+  
+  .sso-button-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .sso-divider span {
+    font-size: 0.8rem;
+    padding: 0 0.75rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .sso-divider::before,
+  .sso-divider::after {
+    background: #4a5568;
+  }
+  
+  .sso-divider span {
+    color: #a0aec0;
+    background: #2d3748;
+  }
+  
+  .dynamic-sso-button {
+    background: #2d3748;
+    border-color: #4a5568;
+    color: #e2e8f0;
+  }
+  
+  .dynamic-sso-button:hover {
+    background: #4a5568;
+  }
+  
+  .sso-button-text {
+    color: #e2e8f0;
+  }
+  
+  .dynamic-sso-loading p,
+  .dynamic-sso-empty {
+    color: #a0aec0;
+  }
+  
+  /* Dark mode provider-specific styles */
+  .dynamic-sso-button.google-button {
+    background: linear-gradient(135deg, #2d3748 0%, #1a365d 100%);
+  }
+  
+  .dynamic-sso-button.google-button:hover {
+    background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+  }
+  
+  .dynamic-sso-button.facebook-button {
+    background: linear-gradient(135deg, #2d3748 0%, #2c5282 100%);
+  }
+  
+  .dynamic-sso-button.facebook-button:hover {
+    background: linear-gradient(135deg, #2c5282 0%, #3182ce 100%);
+  }
+  
+  .dynamic-sso-button.github-button {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  }
+  
+  .dynamic-sso-button.github-button:hover {
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+  }
+}
+
+/* Animations */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Accessibility */
+.dynamic-sso-button:focus {
+  outline: 2px solid var(--provider-color, #667eea);
+  outline-offset: 2px;
+}
+
+.dynamic-sso-button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .dynamic-sso-button {
+    border-width: 2px;
+  }
+  
+  .dynamic-sso-button:hover,
+  .dynamic-sso-button:focus {
+    border-width: 3px;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .dynamic-sso-button,
+  .sso-loading-spinner {
+    transition: none;
+    animation: none;
+  }
+  
+  .dynamic-sso-button:hover {
+    transform: none;
+  }
+}
